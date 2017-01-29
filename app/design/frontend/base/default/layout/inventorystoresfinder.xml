@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <catalog_product_view>
+        <reference name="head">
+            <action method="addJs"><script>magestore/inventorystoresfinder/storesfinder.js</script></action>
+            <action method="addJs"><script>magestore/inventorystoresfinder/underscore-min.js</script></action>
+            <action method="addItem"><type>skin_css</type><name>css/magestore/storesfinder/styles.css</name><params/></action>
+        </reference>
+
+        <reference name="product.info">
+            <action method="setTemplate"><template>inventorystoresfinder/product/view.phtml</template></action>
+            <block type="inventorystoresfinder/catalog_product_storesinfo" name="product.stores_info" as="stores_info" template="inventorystoresfinder/product/stores_info.phtml">
+                <!--<action method="addToParentGroup"><group>detailed_info</group></action>-->
+                <!--<action method="setTitle" translate="value"><value>Stores Address</value></action>-->
+
+            </block>
+        </reference>
+        <reference name="before_body_end">
+            <block type="inventorystoresfinder/catalog_product_storesmap" name="product.stores_map" as="stores_map" template="inventorystoresfinder/product/stores_map.phtml">
+            </block>
+        </reference>
+    </catalog_product_view>
+</layout>

@@ -1,0 +1,89 @@
+<?php
+/**
+ * Magestore
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Magestore.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magestore.com/license-agreement.html
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Magestore
+ * @package     Magestore_Inventory
+ * @copyright   Copyright (c) 2012 Magestore (http://www.magestore.com/)
+ * @license     http://www.magestore.com/license-agreement.html
+ */
+$api_key = Mage::getStoreConfig('inventoryplus/location/api_key');
+$helper = Mage::helper('inventorystoresfinder');
+$warehouse = Mage::registry('warehouse_data')->getData();
+$location = $helper->getWarehouseLocation($warehouse['warehouse_id']);
+?>
+
+<?php if($location):?>
+
+<div id="warehouse-map" style="width: 100%; height: 400px"></div>
+
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDszlbWP-zggO-J_Pk4go5tdaMIjZUCAio&callback=initialize"></script>
+
+<script>
+    var map;
+    var marker;
+    function initialize() {
+        if(google && google.maps){
+            var location = {lat: <?php echo $location['lat']?>, lng: <?php echo $location['lng']?>};
+            map = new google.maps.Map(document.getElementById('warehouse-map'), {
+                center: location,
+                zoom: 18
+            });
+            marker = new google.maps.Marker({
+                position: location,
+                map: map,
+                title: 'Warehouse Address',
+                draggable: true,
+            });
+            marker.addListener('click', toggleBounce);
+            marker.addListener('drag',function(event) {
+                var latElement = (document.getElementById('lat'));
+                latElement.setAttribute('value',event.latLng.lat());
+                var lngElement = (document.getElementById('lng'));
+                lngElement.setAttribute('value',event.latLng.lng());
+            });
+            marker.setMap(map);
+        }
+    }
+    function toggleBounce() {
+        if (marker.getAnimation() !== null) {
+            marker.setAnimation(null);
+        } else {
+            marker.setAnimation(google.maps.Animation.BOUNCE);
+        }
+    }
+    var myTabs = $$("a.tab-item-link");
+    for (var i = 0; i < myTabs.length; i++) {
+        Event.observe(myTabs[i], "click", function (event) {
+            var tab = Event.findElement(event, "a");
+            if(tab.id=='warehouse_tabs_form_section'){
+                setTimeout(function() {
+                    google.maps.event.trigger(map, 'resize');
+                    map.setZoom(map.getZoom());
+                    var latLng = marker.getPosition();
+                    map.setCenter(latLng);
+                }, 300)
+            }
+            Event.stop(event);
+        });
+    }
+
+</script>
+
+<?php else : ?>
+
+
+
+<?php endif;?>
+

@@ -1,0 +1,36 @@
+<!--Map Embed -->
+<div id="stores-finder-details">
+        <a class="close" href="#">x</a>
+        <div class="map-content">
+                <div class="form-field">
+                    <input id="autocomplete" placeholder="Enter your address"  type="text" />
+                </div>
+                <iframe
+                    id="map-embed"
+                    width="100%"
+                    height="100%"
+                    frameborder="0" style="border:0"
+                    src=""
+                    allowfullscreen>
+                </iframe>
+        </div>
+        <div class="box-list">
+                <ul class="info-stores" style="display: block">
+
+                </ul>
+                <div class="store-details" style="display: none">
+                        <span class="back-toolbar">
+                                Back
+                        </span>
+                        <div class="box-content">
+                                <h3>Dia Chi</h3>
+                                <h3>SDT</h3>
+                                <p>Thoi gian lam viec</p>
+                                <p>Mo Ta</p>
+                        </div>
+                </div>
+        </div>
+
+</div>
+<div class="map-overlay"></div>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDszlbWP-zggO-J_Pk4go5tdaMIjZUCAio&libraries=places&callback=window.initAutocomplete" async defer></script>

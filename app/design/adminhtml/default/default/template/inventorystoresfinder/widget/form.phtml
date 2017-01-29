@@ -1,0 +1,84 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magento.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magento.com for more information.
+ *
+ * @category    design
+ * @package     default_default
+ * @copyright   Copyright (c) 2006-2015 X.commerce, Inc. (http://www.magento.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+$helper = Mage::helper('inventorystoresfinder');
+$warehouse = Mage::registry('warehouse_data')->getData();
+$address = $helper->getWarehouseAddress($warehouse['warehouse_id']);
+
+?>
+<div class="entry-edit">
+    <?php echo $this->getFormHtml();?>
+</div>
+<?php if($address):?>
+<div class="map-container" style="width: 40%;">
+    <iframe
+        id="map"
+        width="100%"
+        height="450"
+        frameborder="0" style="border:0"
+        src="https://www.google.com/maps/embed/v1/place?key=AIzaSyDszlbWP-zggO-J_Pk4go5tdaMIjZUCAio&q=<?php echo $address?>" allowfullscreen>
+    </iframe>
+</div>
+<?php else :?>
+    <div><span class="strong">Bạn nên nhập thông tin địa chỉ warehouse trước</span></div>
+<?php endif;?>
+<?php echo $this->getChildHtml('form_after');?>
+
+<script>
+    var placeSearch, autocomplete;
+    function initAutocomplete() {
+        var input = (document.getElementById('store_address'));
+        autocomplete = new google.maps.places.Autocomplete(input);
+        autocomplete.addListener('place_changed', fillInAddress);
+    }
+    function fillInAddress() {
+        var place = autocomplete.getPlace();
+        var location = place.geometry.location.lat()+','+place.geometry.location.lng();
+        var latElement = (document.getElementById('lat'));
+        latElement.setAttribute('value',place.geometry.location.lat());
+        var lngElement = (document.getElementById('lng'));
+        lngElement.setAttribute('value',place.geometry.location.lng());
+        var placeId = autocomplete.getPlace().place_id;
+        var iframe = document.getElementById('map');
+        iframe.src = "https://www.google.com/maps/embed/v1/place?key=AIzaSyDszlbWP-zggO-J_Pk4go5tdaMIjZUCAio&q=place_id:"+placeId;
+    }
+    function geolocate() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                var geolocation = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+                var circle = new google.maps.Circle({
+                    center: geolocation,
+                    radius: position.coords.accuracy
+                });
+                autocomplete.setBounds(circle.getBounds());
+            });
+        }
+    }
+    geolocate();
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDszlbWP-zggO-J_Pk4go5tdaMIjZUCAio&libraries=places&callback=initAutocomplete" async defer></script>

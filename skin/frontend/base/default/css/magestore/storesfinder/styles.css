@@ -1,0 +1,141 @@
+#stores-finder{
+    width: 50%;
+    float: right;
+    clear: right;
+    padding-left: 15px;
+}
+.info-stores{
+    width: 100%;
+    margin: 46px 0 0;
+    padding: 10px 15px 15px;
+    border: 1px solid #cccccc;
+    clear: both;
+    position: relative;
+}
+.info-stores .info-store {
+    padding: 0 0 10px 0;
+    margin: 0 0 5px;
+    border-bottom: 1px solid #ededed;
+}
+.info-stores .info-store:last-child {
+    border-bottom: 0;
+    padding-bottom: 5px;
+    margin-bottom: 0;
+}
+.info-left{
+    float: left;
+    width: 75%;
+}
+.info-right {
+    float: right;
+    width: 25%;
+}
+.info-left span,
+.info-right span {
+    display: block;
+}
+.info-store:before, .info-store:after{
+    content: ".";
+    visibility: hidden;
+    display: block;
+    height: 0;
+    clear: both;
+}
+
+
+
+
+.modal-map-locked {
+    overflow: hidden;
+}
+.map-container{
+    display: none;
+}
+#stores-finder-details{
+    display: none;
+}
+#stores-finder-details.active {
+    width: 80%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    text-align: center;
+    background-color: #fff;
+    z-index: 30;
+    height: 90%;
+    display: block;
+    padding: 1%;
+}
+.map-content {
+    float: left;
+    width: 65%;
+    height: 90%;
+}
+.map-content .form-field {
+    margin: 0 0 10px;
+}
+.map-content .form-field input {
+    border: 1px solid #eee;
+    border-radius: 5px;
+    font-size: 14px;
+    height: 35px;
+}
+.map-overlay.active {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    background-color: rgba(43, 46, 56, .9);
+}
+.close {
+    position: absolute;
+    right: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    background-color: #ddd;
+    width: 20px;
+    height: 20px;
+    padding: 0px;
+    line-height: 17px;
+    border-radius: 50%;
+    top: 10px;
+    color: #fff;
+
+}
+.close:hover {
+    text-decoration: none;
+    color: #fff;
+}
+
+#autocomplete {
+    padding: 10px;
+    width: 100%;
+}
+.box-list {
+    float: left;
+    width: 35%;
+    text-align: left;
+    padding-left: 20px;
+}
+.store-details h3 {
+    clear: both;
+    font-size: 14px;
+    display: block;
+    float: left;
+    text-transform: capitalize;
+    margin: 0;
+    line-height: 2;
+}
+span.back-toolbar {
+    background-color: #2e8ab8;
+    color: #fff;
+    padding: 5px 10px;
+    float: left;
+    display: inline-block;
+    margin-bottom: 10px;
+}

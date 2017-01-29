@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/home/alex/Projects/Inventory/sourcecode/inventoryplus/app/code/local/Magestore/Inventorywarehouse/controllers/Adminhtml/Inw/SendstockController.php</file>
+            <file>file:/home/alex/Projects/Inventory/sourcecode/inventoryplus/app/code/local/Magestore/Inventoryplus/Model/Mysql4/Warehouse/Product.php</file>
+            <file>file:/home/alex/Projects/Inventory/sourcecode/inventoryplus/app/code/local/Magestore/Inventorywarehouse/controllers/Adminhtml/Inw/WarehouseController.php</file>
+            <file>file:/home/alex/Projects/Inventory/sourcecode/inventoryplus/app/code/local/Magestore/Inventorywarehouse/Model/Observer.php</file>
+            <file>file:/home/alex/Projects/Inventory/sourcecode/inventoryplus/app/code/local/Magestore/Inventoryplus/Helper/Data.php</file>
+            <file>file:/home/alex/Projects/Inventory/sourcecode/inventoryplus/app/code/local/Magestore/Inventorybarcode/controllers/Adminhtml/Inb/BarcodeattributeController.php</file>
+            <file>file:/home/alex/Projects/Inventory/sourcecode/inventoryplus/app/code/local/Magestore/Inventorydashboard/controllers/Adminhtml/Ind/DashboardController.php</file>
+            <file>file:/home/alex/Projects/Inventory/sourcecode/inventoryplus/app/code/local/Magestore/Inventorydropship/etc/adminhtml.xml</file>
+            <file>file:/home/alex/Projects/Inventory/sourcecode/inventoryplus/app/code/local/Magestore/Inventorywarehouse/etc/adminhtml.xml</file>
+        </group>
+    </open-files>
+</project-private>

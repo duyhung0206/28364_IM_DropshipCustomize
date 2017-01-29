@@ -1,0 +1,56 @@
+<?php
+/**
+ * Magestore
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Magestore.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magestore.com/license-agreement.html
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Magestore
+ * @package     Magestore_Inventory
+ * @copyright   Copyright (c) 2012 Magestore (http://www.magestore.com/)
+ * @license     http://www.magestore.com/license-agreement.html
+ *
+ */
+$helper = Mage::helper('inventorystoresfinder');
+?>
+<!--Autocomplete Place -->
+<div id="stores-finder">
+    <h2><?php echo $helper->__('Stores Address:');?></h2>
+    <ul class="info-stores">
+
+    </ul>
+</div>
+<?php echo $this->getChildHtml('stores_map');?>
+
+<div class="clearer"></div>
+<!--<script src="http://localhost/test/storelocation.js"></script>-->
+<script>
+    (function($){
+        $( document ).ready(function() {
+            var autocomplete;
+            window.initAutocomplete = function () {
+                var input = (document.getElementById('autocomplete'));
+                autocomplete = new google.maps.places.Autocomplete(input);
+                autocomplete.addListener('place_changed', fillInAddress);
+            };
+            function fillInAddress() {
+                var place = autocomplete.getPlace();
+                storesfinder.data("stores_finder").onChangeLocationCustomer(place.geometry.location.lat(), place.geometry.location.lng());
+            }
+
+            var options = <?php echo $this->getJSONConfigStores();?>;
+            var storesfinder = $('#stores-finder').storesfinder(options);
+        });
+
+
+    })(jQuery);
+
+</script>

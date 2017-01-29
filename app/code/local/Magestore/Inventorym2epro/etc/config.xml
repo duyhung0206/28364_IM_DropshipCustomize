@@ -1,0 +1,140 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magestore
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Magestore.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magestore.com/license-agreement.html
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Magestore
+ * @package     Magestore_Inventoryphysicalstocktaking
+ * @copyright   Copyright (c) 2012 Magestore (http://www.magestore.com/)
+ * @license     http://www.magestore.com/license-agreement.html
+ */
+-->
+<config>
+    <modules>
+        <Magestore_Inventorym2epro>
+            <version>0.1.0</version>
+        </Magestore_Inventorym2epro>
+    </modules>
+    <frontend>
+        <routers>
+            <inventorym2epro>
+                <use>standard</use>
+                <args>
+                    <module>Magestore_Inventorym2epro</module>
+                    <frontName>inventorym2epro</frontName>
+                </args>
+            </inventorym2epro>
+        </routers>
+        <layout>
+            <updates>
+                <inventorym2epro>
+                    <file>inventorym2epro.xml</file>
+                </inventorym2epro>
+            </updates>
+        </layout>
+        <translate>
+            <modules>
+                <Magestore_Inventorym2epro>
+                    <files>
+                        <default>Magestore_Inventorym2epro.csv</default>
+                    </files>
+                </Magestore_Inventorym2epro>
+            </modules>
+        </translate>
+    </frontend>
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <magestore_inventorym2epro after="Mage_Adminhtml">Magestore_Inventorym2epro_Adminhtml</magestore_inventorym2epro>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+    <adminhtml>
+        <layout>
+            <updates>
+                <inventorym2epro>
+                    <file>inventorym2epro.xml</file>
+                </inventorym2epro>
+            </updates>
+        </layout>
+        <translate>
+            <modules>
+                <Magestore_Inventorym2epro>
+                    <files>
+                        <default>Magestore_Inventorym2epro.csv</default>
+                    </files>
+                </Magestore_Inventorym2epro>
+            </modules>
+        </translate>
+    </adminhtml>
+    <global>
+        <models>
+            <inventorym2epro>
+                <class>Magestore_Inventorym2epro_Model</class>
+                <resourceModel>inventorym2epro_mysql4</resourceModel>
+            </inventorym2epro>
+            <inventorym2epro_mysql4>
+                <class>Magestore_Inventorym2epro_Model_Mysql4</class>
+                <entities>
+                </entities>
+            </inventorym2epro_mysql4>
+        </models>
+        <resources>
+            <inventorym2epro_setup>
+                <setup>
+                    <module>Magestore_Inventorym2epro</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </inventorym2epro_setup>
+            <inventorym2epro_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </inventorym2epro_write>
+            <inventorym2epro_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </inventorym2epro_read>
+        </resources>
+        <blocks>
+            <inventorym2epro>
+                <class>Magestore_Inventorym2epro_Block</class>
+            </inventorym2epro>
+        </blocks>
+        <helpers>
+            <inventorym2epro>
+                <class>Magestore_Inventorym2epro_Helper</class>
+            </inventorym2epro>
+        </helpers>
+        <events>
+
+        </events>
+    </global>
+
+    <default>
+        <inventoryplus>
+            <integrate_m2epro>
+                <associated_with>1</associated_with>
+                <warehouse>1</warehouse>
+            </integrate_m2epro>
+        </inventoryplus>
+    </default>
+</config>
