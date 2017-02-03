@@ -250,7 +250,12 @@
                     <label>Email template when confirming drop shipment request from supplier to admin</label>
                     <file>inventorydropship/confirm_to_admin.html</file>
                     <type>html</type>
-                </inventoryplus_dropship_email_confirm_to_admin>	
+                </inventoryplus_dropship_email_confirm_to_admin>
+                <inventoryplus_dropship_email_admin_to_customer translate="label" module="inventorydropship">
+                    <label>Email template when confirming drop shipment request from admin to customer</label>
+                    <file>inventorydropship/admin_to_customer.html</file>
+                    <type>html</type>
+                </inventoryplus_dropship_email_admin_to_customer>
                 <inventoryplus_dropship_email_cancel_to_admin translate="label" module="inventorydropship">
                     <label>Email template when refusing drop shipment request from supplier to admin</label>
                     <file>inventorydropship/cancel_to_admin.html</file>
@@ -296,6 +301,7 @@
                 <email_request_to_supplier>inventoryplus_dropship_email_request_to_supplier</email_request_to_supplier>
                 <email_reset_password>inventoryplus_dropship_email_reset_password</email_reset_password>
                 <email_confirm_to_admin>inventoryplus_dropship_email_confirm_to_admin</email_confirm_to_admin>
+                <email_admin_to_customer>inventoryplus_dropship_email_admin_to_customer</email_admin_to_customer>
                 <email_cancel_to_admin>inventoryplus_dropship_email_cancel_to_admin</email_cancel_to_admin>
                 <email_confirm_shipped_to_admin>inventoryplus_dropship_email_confirm_shipped_to_admin</email_confirm_shipped_to_admin>
                 <email_refund_to_supplier>inventoryplus_dropship_email_refund_to_supplier</email_refund_to_supplier>

@@ -445,6 +445,7 @@ class Magestore_Inventorydropship_SupplierController extends Mage_Core_Controlle
                 if (!$adminNotNeedToApprove) {
                     Mage::helper('inventorydropship')->sendEmailConfirmDropShipToAdmin($dropshipId);
                 }
+                Mage::helper('inventorydropship')->sendEmaiAdminToCustomer($dropshipId);
                 $this->_redirect('*/*/viewdropship', array('id' => $dropshipId));
                 return;
             }
