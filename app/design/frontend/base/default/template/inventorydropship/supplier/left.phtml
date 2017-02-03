@@ -17,6 +17,12 @@
             <?php else: ?>
                 <li class=""><a href="<?php echo $this->getUrl('inventorydropship/supplier/index') ?>"><?php echo $this->__('Supplier Information') ?></a></li>
             <?php endif ?>
+
+            <?php if($activeTab == 'adjuststock' || $activeTab == 'viewadjuststock' || $activeTab == 'createadjuststock' || $activeTab == 'prepareadjuststock'): ?>
+                <li class="current"><a href="<?php echo $this->getUrl('inventorydropship/supplier/adjuststock') ?>"><strong><?php echo $this->__('Adjust stock') ?></strong></a></li>
+            <?php else: ?>
+                <li class="current"><a href="<?php echo $this->getUrl('inventorydropship/supplier/adjuststock') ?>"><?php echo $this->__('Adjust stock') ?></a></li>
+            <?php endif ?>
             <li class=" "><a href="<?php echo $this->getUrl('inventorydropship/supplier/logout') ?>" title="<?php echo $this->__('Log Out') ?>"><?php echo $this->__('Log Out') ?></a></li>
         </ul>
         <hr style = "opacity:0.3; margin-top: 20px">

@@ -31,6 +31,30 @@ class Magestore_Inventoryplus_Model_Observer {
 
     protected $_refreshCache = false;
 
+    public function saveConfig($observer){
+        $url_supplier = Mage::getStoreConfig('inventoryplus/general/change_url');
+        $allStores = Mage::app()->getStores();
+        foreach ($allStores as $_eachStoreId => $val)
+        {
+            $_storeId = Mage::app()->getStore($_eachStoreId)->getId();
+            $exits = Mage::getModel('core/url_rewrite')->getCollection()
+                ->addFieldToFilter('id_path', 'supplier_login_'.$_storeId);
+            if(count($exits)){
+                $url = Mage::getModel('core/url_rewrite')->load($exits->getData()[0]['url_rewrite_id']);
+                $url->setTargetPath('inventorydropship/supplier/login/')
+                    ->setRequestPath($url_supplier)
+                    ->save();
+            }else{
+                Mage::getModel('core/url_rewrite')->setIsSystem(0)
+                    ->setStoreId($_storeId)
+                    ->setIdPath('supplier_login_'.$_storeId)
+                    ->setTargetPath('inventorydropship/supplier/login/')
+                    ->setRequestPath($url_supplier)
+                    ->save();
+            }
+        }
+    }
+
     public function controller_action_layout_load_before($observer) {
         $controller = $observer->getEvent()->getAction();
         $layout = $observer->getEvent()->getLayout();

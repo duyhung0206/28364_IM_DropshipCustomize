@@ -93,6 +93,14 @@ class Magestore_Inventorydropship_Block_Inventorydropship extends Mage_Core_Bloc
             return 'supplier_info';
         }elseif($action == 'dropship'){
             return 'dropship';
+        }elseif($action == 'adjuststock'){
+            return 'adjuststock';
+        }elseif($action == 'createadjuststock'){
+            return 'createadjuststock';
+        }elseif($action == 'prepareadjuststock'){
+            return 'prepareadjuststock';
+        }elseif($action == 'viewadjuststock'){
+            return 'viewadjuststock';
         }
     }
     
@@ -105,8 +113,21 @@ class Magestore_Inventorydropship_Block_Inventorydropship extends Mage_Core_Bloc
                                         ->addFieldToFilter('supplier_id',$supplierId)
                                         ->setOrder('dropship_id','DESC');
             $this->setData('listDropships', $collection);
-	}
-	return $this->getData('listDropships'); 
+        }
+        return $this->getData('listDropships');
+    }
+
+    public function listProductAdjustStockSupplier()
+    {
+        if(!$this->hasData('listProductAdjustStock')) {
+            $supplierId = Mage::getSingleton('inventorydropship/session')->getSupplier()->getId();
+            $collection = Mage::getModel('inventorydropship/supplier_adjuststock')
+                ->getCollection()
+                ->addFieldToFilter('supplier_id',$supplierId)
+                ->setOrder('supplier_adjuststock_id','DESC');
+            $this->setData('listProductAdjustStock', $collection);
+        }
+        return $this->getData('listProductAdjustStock');
     }
     
     public function getPagerHtml()

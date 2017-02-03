@@ -23,7 +23,7 @@
 <config>
     <modules>
         <Magestore_Inventorydropship>
-            <version>0.1.5</version>
+            <version>0.1.6</version>
         </Magestore_Inventorydropship>
     </modules>
     <frontend>
@@ -164,6 +164,12 @@
                     <inventorydropship>
                         <table>erp_inventory_dropship</table>
                     </inventorydropship>
+                    <supplier_adjuststock>
+                        <table>erp_inventory_supplier_adjuststock</table>
+                    </supplier_adjuststock>
+                    <supplier_adjuststock_product>
+                        <table>erp_inventory_supplier_adjuststock_product</table>
+                    </supplier_adjuststock_product>
                     <inventorydropship_product>
                         <table>erp_inventory_dropship_product</table>
                     </inventorydropship_product>

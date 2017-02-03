@@ -1,0 +1,51 @@
+<?php $productSuppliers = $this->listProductAdjustStockSupplier(); ?>
+<?php $status = array(
+    0 => 'Pending',
+    1 => 'Completed',
+    2 => 'Canceled'
+)?>
+<div class="page-title">
+    <h1><?php echo $this->__('Adjust Stock') ?></h1>
+    <a style="position: absolute;top: 26px;right: 31px;" title="Create AdjustStock" class="button" href="<?php echo Mage::getBaseUrl().'inventorydropship/supplier/createadjuststock'?>"><?php echo $this->__('Create AdjustStock')?></a>
+</div>
+<?php if($productSuppliers->getSize()): ?>
+    <?php echo $this->getPagerHtml() ?>
+    <table class="data-table" id="my-adjuststock-table" >
+        <colgroup>
+            <col width="10" />
+            <col />
+            <col />
+            <col />
+            <col />
+            <col width="6" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th><?php echo $this->__('ID') ?></th>
+                <th><?php echo $this->__('Created on') ?></th>
+                <th><?php echo $this->__('Created by') ?></th>
+                <th><?php echo $this->__('Adjusted Warehouse') ?></th>
+                <th><?php echo $this->__('Confirmed at') ?></th>
+                <th><?php echo $this->__('Status') ?></th>
+                <th><?php echo $this->__('Action') ?></th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($productSuppliers as $productSupplier): ?>
+            <tr>
+                <td style="text-align: center;"><?php echo $productSupplier->getData('supplier_adjuststock_id') ?>&nbsp;</td>
+                <td><?php echo date("D, j M, Y", strtotime($productSupplier->getData('created_at'))) ?>&nbsp;</td>
+                <td><?php echo $productSupplier->getData('warehouse_name') ?></td>
+                <td><?php echo ($productSupplier->getData('confirmed_at')==null)?$productSupplier->getData('confirmed_at'):date("D, j M, Y", strtotime($productSupplier->getData('confirmed_at'))) ?>&nbsp;</td>
+                <td><?php echo $productSupplier->getData('confirmed_by') ?></td>
+                <td><?php echo $status[$productSupplier->getData('status')] ?></td>
+                <td><a href="<?php echo $this->getUrl('inventorydropship/supplier/viewadjuststock', array('id' => $productSupplier->getData('supplier_adjuststock_id'))) ?>"><?php echo $this->__('View') ?></a>&nbsp;</td>
+            </tr>
+        <?php endforeach ?>
+        </tbody>
+    </table>
+    <?php echo $this->getPagerHtml() ?>
+    <script type="text/javascript">decorateTable('my-adjuststock-table')</script>
+<?php else: ?>
+    <p><?php echo $this->__('You don\'t have any adjust stock') ?></p>
+<?php endif ?>

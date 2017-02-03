@@ -20,7 +20,96 @@
  * @license     http://www.magestore.com/license-agreement.html
  */
 -->
-<layout version="0.1.0">     
+<layout version="0.1.0">
+
+    <inventorydropship_supplier_adjuststock>
+        <label>Supplier List Adjust Stock</label>
+        <remove name="right"/>
+        <remove name="footer"/>
+        <remove name="before_body_end"/>
+        <reference name="root">
+            <action method="setTemplate"><template>page/2columns-left.phtml</template></action>
+        </reference>
+
+        <reference name="header">
+            <block type="page/header" name="header">
+                <action method="setTemplate"><template>inventorydropship/supplier/header.phtml</template></action>
+            </block>
+        </reference>
+        <reference name="left">
+            <block type="inventorydropship/inventorydropship" name="left_adjuststock" before="-" template="inventorydropship/supplier/left.phtml" />
+        </reference>
+        <reference name="content">
+            <block type="inventorydropship/inventorydropship" name="supplier_adjuststock" template="inventorydropship/supplier/listadjuststock.phtml" />
+        </reference>
+    </inventorydropship_supplier_adjuststock>
+
+    <inventorydropship_supplier_createadjuststock>
+        <label>Supplier List Adjust Stock</label>
+        <remove name="right"/>
+        <remove name="footer"/>
+        <remove name="before_body_end"/>
+        <reference name="root">
+            <action method="setTemplate"><template>page/2columns-left.phtml</template></action>
+        </reference>
+
+        <reference name="header">
+            <block type="page/header" name="header">
+                <action method="setTemplate"><template>inventorydropship/supplier/header.phtml</template></action>
+            </block>
+        </reference>
+        <reference name="left">
+            <block type="inventorydropship/inventorydropship" name="left_adjuststock" before="-" template="inventorydropship/supplier/left.phtml" />
+        </reference>
+        <reference name="content">
+            <block type="inventorydropship/inventorydropship" name="supplier_adjuststock" template="inventorydropship/supplier/selectwarehouse.phtml" />
+        </reference>
+    </inventorydropship_supplier_createadjuststock>
+
+    <inventorydropship_supplier_prepareadjuststock>
+        <label>Supplier List Adjust Stock</label>
+        <remove name="right"/>
+        <remove name="footer"/>
+        <remove name="before_body_end"/>
+        <reference name="root">
+            <action method="setTemplate"><template>page/2columns-left.phtml</template></action>
+        </reference>
+
+        <reference name="header">
+            <block type="page/header" name="header">
+                <action method="setTemplate"><template>inventorydropship/supplier/header.phtml</template></action>
+            </block>
+        </reference>
+        <reference name="left">
+            <block type="inventorydropship/inventorydropship" name="left_prepareadjuststock" before="-" template="inventorydropship/supplier/left.phtml" />
+        </reference>
+        <reference name="content">
+            <block type="inventorydropship/inventorydropship" name="supplier_prepareadjuststock" template="inventorydropship/supplier/prepareadjuststock.phtml" />
+        </reference>
+    </inventorydropship_supplier_prepareadjuststock>
+
+    <inventorydropship_supplier_viewadjuststock>
+        <label>Supplier List Adjust Stock</label>
+        <remove name="right"/>
+        <remove name="footer"/>
+        <remove name="before_body_end"/>
+        <reference name="root">
+            <action method="setTemplate"><template>page/2columns-left.phtml</template></action>
+        </reference>
+
+        <reference name="header">
+            <block type="page/header" name="header">
+                <action method="setTemplate"><template>inventorydropship/supplier/header.phtml</template></action>
+            </block>
+        </reference>
+        <reference name="left">
+            <block type="inventorydropship/inventorydropship" name="left_prepareadjuststock" before="-" template="inventorydropship/supplier/left.phtml" />
+        </reference>
+        <reference name="content">
+            <block type="inventorydropship/inventorydropship" name="supplier_prepareadjuststock" template="inventorydropship/supplier/prepareadjuststock.phtml" />
+        </reference>
+    </inventorydropship_supplier_viewadjuststock>
+
     <inventorydropship_supplier_index>
         <label>Supplier Login Form</label>        
         <remove name="right"/>

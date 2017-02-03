@@ -23,7 +23,7 @@
 <config>    
     <modules>
         <Magestore_Inventoryplus>
-            <version>0.1.4</version>
+            <version>0.1.5</version>
         </Magestore_Inventoryplus>
     </modules>
     <frontend>
@@ -259,6 +259,14 @@
             </inventoryplus>
         </helpers>
         <events>
+            <admin_system_config_changed_section_inventoryplus>
+                <observers>
+                    <inventory_observers>
+                        <class>inventoryplus/observer</class>
+                        <method>saveConfig</method>
+                    </inventory_observers>
+                </observers>
+            </admin_system_config_changed_section_inventoryplus>
             <catalog_product_prepare_save>
                 <observers>
                     <inventory_observers>

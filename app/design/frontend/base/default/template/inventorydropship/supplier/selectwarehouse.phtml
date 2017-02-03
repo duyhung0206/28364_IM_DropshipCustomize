@@ -1,0 +1,27 @@
+<?php $listwarehouse = Mage::getModel('inventoryplus/warehouse')->getCollection()
+                        ->addFieldToFilter('status', 1);
+?>
+<div class="page-title">
+    <h1><?php echo $this->__('Adjust Stock') ?></h1>
+</div>
+<form enctype="multipart/form-data" method="post" action="<?php echo Mage::getBaseUrl().'inventorydropship/supplier/prepareadjuststock'?>">
+    <div class="entry-edit">
+        <div id="adjuststock_form" class="fieldset">
+            <div>
+                <label for="warehouse">
+                    <?php echo $this->__('Please select a Warehouse to adjust stock')?>:&nbsp;&nbsp;
+                </label>
+                <select name="warehouse_id">
+                    <?php foreach ($listwarehouse as $warehouse){?>
+                        <option value="<?php echo $warehouse->getData('warehouse_id')?>"><?php echo $warehouse->getData('warehouse_name')?></option>
+                    <?php }?>
+                </select>
+            </div><br>
+            <div>
+                <button class="button" type="submit">
+                    <span>Continue</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</form>

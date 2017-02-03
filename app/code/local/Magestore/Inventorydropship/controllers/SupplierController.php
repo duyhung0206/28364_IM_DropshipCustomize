@@ -45,6 +45,120 @@ class Magestore_Inventorydropship_SupplierController extends Mage_Core_Controlle
         $this->renderLayout();
     }
 
+    public function canceladjuststockAction(){
+        if (!$this->_getSession()->isLoggedIn()) {
+            $this->_redirect('*/*/login');
+            return;
+        }
+        $id = $this->getRequest()->getParam('id');
+        $supplier_adjuststock = Mage::getModel('inventorydropship/supplier_adjuststock')->load($id);
+        if($supplier_adjuststock->getStatus() == 0)
+            $supplier_adjuststock->setStatus(2)->save();
+        $this->_redirect('*/*/viewadjuststock', array('id'=> $id));
+        return;
+    }
+
+    public function saveAction(){
+        if (!$this->_getSession()->isLoggedIn()) {
+            $this->_redirect('*/*/login');
+            return;
+        }
+        $data = $this->getRequest()->getPost();
+        if($data){
+            if(!count($data['products']) || !count($data['qty_adjust'])){
+                $this->_redirect('*/*/prepareadjuststock', array('warehouse_id'=> $data['warehouse_id']));
+                return;
+            }
+            $checkProducts = false;
+            foreach ($data['products'] as $key => $value){
+                echo $key."_".$value;
+                if(intval($data['qty_adjust'][$key])){
+                    $checkProducts = true;
+                }
+            }
+            if(!$checkProducts){
+                $this->_redirect('*/*/prepareadjuststock', array('warehouse_id'=> $data['warehouse_id']));
+                return;
+            }
+            $warehouse = Mage::getModel('inventoryplus/warehouse')->load($data['warehouse_id']);
+            $supplier = $this->_getSession()->getSupplier();
+            $supplier_adjuststock = Mage::getModel('inventorydropship/supplier_adjuststock');
+            $supplier_adjuststock->setSupplierId($supplier->getSupplierId())
+                ->setWarehouseId($data['warehouse_id'])
+                ->setWarehouseName($warehouse->getWarehouseName())
+                ->setReason($data['reason'])
+                ->setCreatedBy($supplier->getSupplierName())
+                ->setCreatedAt(date("Y-m-d"))
+                ->setStatus(0)
+                ->save();
+
+            foreach ($data['products'] as $key => $value){
+                $qty_adjust = intval($data['qty_adjust'][$key]);
+                if($qty_adjust){
+                    Mage::getModel('inventorydropship/supplier_adjuststock_product')->setSupplierAdjuststockId($supplier_adjuststock->getId())
+                        ->setProductId($key)
+                        ->setAdjustQty($qty_adjust)
+                        ->save();
+                }
+            }
+            $this->_redirect('*/*/viewadjuststock', array('id'=> $supplier_adjuststock->getId()));
+            return;
+        }else{
+            $this->_redirect('*/*/prepareadjuststock', array('warehouse_id'=> $data['warehouse_id']));
+            return;
+        }
+    }
+
+    public function adjuststockAction() {
+        if (!$this->_getSession()->isLoggedIn()) {
+            $this->_redirect('*/*/login');
+            return;
+        }
+        $this->loadLayout();
+        $listAdjustStockBlock = $this->getLayout()->getBlock('supplier_adjuststock');
+        $listAdjustStock = $listAdjustStockBlock->listProductAdjustStockSupplier();
+        $pager = $this->getLayout()->createBlock('page/html_pager', 'inventorydropship.supplier.adjuststock.pager')
+            ->setCollection($listAdjustStock);
+        $listAdjustStockBlock->setChild('pager', $pager);
+        $this->_initLayoutMessages('inventorydropship/session');
+        $this->getLayout()->getBlock('head')->setTitle($this->__('Supplier Adjust Stock'));
+        $this->renderLayout();
+    }
+
+    public function createadjuststockAction() {
+        if (!$this->_getSession()->isLoggedIn()) {
+            $this->_redirect('*/*/login');
+            return;
+        }
+        $this->loadLayout();
+        $this->getLayout()->getBlock('head')->setTitle($this->__('Create adjust stock'));
+        $this->renderLayout();
+    }
+
+    public function prepareadjuststockAction(){
+        if (!$this->_getSession()->isLoggedIn()) {
+            $this->_redirect('*/*/login');
+            return;
+        }
+        $this->loadLayout();
+        $this->getLayout()->getBlock('head')->setTitle($this->__('Create adjust stock'));
+        $this->renderLayout();
+    }
+
+    public function viewadjuststockAction(){
+        if (!$this->_getSession()->isLoggedIn()) {
+            $this->_redirect('*/*/login');
+            return;
+        }
+        if(!$this->getRequest()->getParam('id')){
+            $this->_redirect('*/*/adjuststock');
+            return;
+        }
+        $this->loadLayout();
+        $this->getLayout()->getBlock('head')->setTitle($this->__('View adjust stock'));
+        $this->renderLayout();
+    }
+
     public function loginAction() {
         if ($this->_getSession()->isLoggedIn()) {
             $this->_redirect('*/*/');

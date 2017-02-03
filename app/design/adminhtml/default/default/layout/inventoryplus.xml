@@ -79,6 +79,28 @@
             </action>
         </reference>        
     </adminhtml_inventoryplus_one_tab>
+
+    <!--Inventory Supplier Adjust Stock -->
+    <adminhtml_inp_supplieradjuststock_index>
+        <update handle="adminhtml_inventoryplus_layout" />
+        <reference name="content">
+            <block type="inventoryplus/adminhtml_listsupplieradjuststock" name="inventoryplus_listsupplieradjuststock" />
+        </reference>
+    </adminhtml_inp_supplieradjuststock_index>
+    <adminhtml_inp_supplieradjuststock_edit>
+        <update handle="adminhtml_inventoryplus_one_tab" />
+    </adminhtml_inp_supplieradjuststock_edit>
+    <adminhtml_inp_supplieradjuststock_product>
+        <block type="core/text_list" name="root">
+            <block type="inventoryplus/adminhtml_supplieradjuststock_warehouse" name="warehouse_informarion" template="inventoryplus/supplieradjuststock/warehouse_information.phtml" />
+            <block type="inventoryplus/adminhtml_supplieradjuststock_edit_tab_products" name="inventoryplus.supplieradjuststock.edit.tab.products"/>
+        </block>
+    </adminhtml_inp_supplieradjuststock_product>
+    <adminhtml_inp_supplieradjuststock_productgrid>
+        <block type="core/text_list" name="root">
+            <block type="inventoryplus/adminhtml_supplieradjuststock_edit_tab_products" name="inventoryplus.supplieradjuststock.edit.tab.products"/>
+        </block>
+    </adminhtml_inp_supplieradjuststock_productgrid>
     <!--Inventory Adjust Stock -->
     <adminhtml_inp_adjuststock_index>
         <update handle="adminhtml_inventoryplus_layout" />
@@ -100,6 +122,7 @@
     <adminhtml_inp_adjuststock_edit>
         <update handle="adminhtml_inventoryplus_one_tab" />                
     </adminhtml_inp_adjuststock_edit>
+
     <adminhtml_inp_adjuststock_run>
         <update handle="inventoryplus_adminhtml_process_run" />  
         <reference name="convert_root">

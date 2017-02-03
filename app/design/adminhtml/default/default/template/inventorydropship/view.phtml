@@ -192,7 +192,22 @@
             <?php echo $this->getChildHtml('inventorydropship_attachment') ?>
         </div>
     </div>
-
+    <div class="clear"></div>
+    <div class="box-left">
+        <!--Delivery tracking number Information-->
+        <div class="entry-edit">
+            <div class="entry-edit-head">
+                <h4 class="icon-head head-billing-address"><?php echo Mage::helper('sales')->__('Tracking Information') ?></h4>
+            </div>
+            <fieldset>
+                <address><?php $trackingInfo = $dropship->getTrackingInformation();
+                    $arrays = explode(';', $trackingInfo);
+                    echo $this->__('Shipment title').': '.$arrays[0].'<br/>';
+                    echo $this->__('Delivery Tracking number').': '.$arrays[1].'<br/>';
+                    ?></address>
+            </fieldset>
+        </div>
+    </div>
     <div class="clear"></div>
 
     <div class="entry-edit">

@@ -1,0 +1,259 @@
+
+<?php $actionName = Mage::app()->getRequest()->getActionName();
+    if($actionName == 'viewadjuststock'){
+        $status = array(
+            0 => 'Pending',
+            1 => 'Completed',
+            2 => 'Canceled'
+        );
+        $supplier_adjuststock_id = Mage::app()->getRequest()->getParam('id');
+        $supplier_adjuststock = Mage::getModel('inventorydropship/supplier_adjuststock')->load($supplier_adjuststock_id);
+        $supplier_adjuststock_product = Mage::getModel('inventorydropship/supplier_adjuststock_product')->getCollection()
+            ->addFieldToFilter('supplier_adjuststock_id', $supplier_adjuststock_id);
+        $listProduct = array();
+        foreach ($supplier_adjuststock_product as $item){
+            $listProduct[] = $item->getProductId();
+        }
+        $collection = Mage::getModel('catalog/product')->getCollection()
+            ->addAttributeToSelect('*')
+            ->addAttributeToFilter('entity_id', array('in' => $listProduct))
+            ->addAttributeToFilter('type_id', array('nin' => array('configurable', 'bundle', 'grouped')));
+        $collection->joinField('adjust_qty', 'inventorydropship/supplier_adjuststock_product', 'adjust_qty', 'product_id=entity_id', '{{table}}.supplier_adjuststock_id=' . $supplier_adjuststock_id, 'left');
+
+        ?>
+        <div class="page-title">
+            <h1><?php echo $this->__('View Stock Adjustment') ?></h1>
+            <?php if($supplier_adjuststock->getStatus() == 0){ ?>
+                <button id='cancel-adjuststock' style="position: absolute;top: 26px;right: 31px;" title="Cancel" class="button">
+                    <?php echo $this->__('Cancel')?>
+                </button>
+                <script>
+                    $('cancel-adjuststock').observe('click',function () {
+                        if(confirm("<?php echo $this->__('You want to cancel this adjuststock')?>")){
+                            window.location.href = "<?php echo $this->getUrl('inventorydropship/supplier/canceladjuststock', array('id'=> $supplier_adjuststock->getId()));?>"
+                        }
+                    });
+                </script>
+            <?php }?>
+        </div>
+        <div>
+            <div>
+                <h4 style="margin:0;border-bottom: 0px;font-size: 13px;padding: 5px 10px;border: 1px solid #dcdcdc;background-color: #f7f7f7;" class="icon-head head-edit-form fieldset-legend">
+                    <?php echo $this->__('Stock Adjustment Information')?>
+                </h4>
+            </div>
+            <div style="border: 1px solid #d6d6d6;padding: 10px 15px;margin-bottom: 15px;">
+                <div class="float-left" style="width: 30% !important;float: left">
+                    <div>
+                        <label for="warehouse">
+                            <strong>Warehouse:&nbsp;&nbsp;</strong>
+                        </label>
+                        <?php echo $supplier_adjuststock->getWarehouseName()?>
+                    </div>
+                    <div>
+                        <label for="warehouse">
+                            <strong>Status:&nbsp;&nbsp;</strong>
+                        </label>
+                        <?php echo $status[$supplier_adjuststock->getStatus()]?>
+                    </div><br>
+                </div>
+                <div class="float-left">
+
+                    <lable for="warehouse"><strong>Reason(s) for adjusting stock </strong>
+                    </lable>
+                    <br>
+                    <textarea readonly id="reason" name="reason" title="Reason(s) to adjust stock" rows="2" cols="15" class="required-entry textarea"><?php echo trim($supplier_adjuststock->getReason());?></textarea>
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+        <div>
+            <div>
+                <h4 style="border-bottom: 0px;font-size: 13px;padding: 5px 10px;border: 1px solid #dcdcdc;background-color: #f7f7f7;" class="icon-head head-edit-form fieldset-legend">
+                    <?php echo $this->__('Choose Products for Stock Adjustment')?>
+                </h4>
+            </div>
+        </div>
+
+        <?php if($collection->getSize()): ?>
+            <?php echo $this->getPagerHtml() ?>
+            <table class="data-table" id="my-view-adjuststock-table" >
+                <colgroup>
+                    <col width="10" />
+                    <col />
+                    <col />
+                    <col />
+                    <col />
+                    <col width="6" />
+                </colgroup>
+                <thead>
+                <tr>
+                    <th><?php echo $this->__('ID') ?></th>
+                    <th><?php echo $this->__('Name') ?></th>
+                    <th><?php echo $this->__('SKU') ?></th>
+                    <th><?php echo $this->__('Image') ?></th>
+                    <th><?php echo $this->__('Adjusted Qty') ?></th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($collection as $item): ?>
+                    <tr>
+                        <td><?php echo $item->getId()?></td>
+                        <td><?php echo $item->getName()?></td>
+                        <td><?php echo $item->getSku() ?></td>
+                        <td><img src="<?php echo Mage::helper('catalog/image')->init($item, 'image')->resize(70, 70);?>" alt=""></td>
+                        <td><?php echo $item->getAdjustQty() ?></td>
+                    </tr>
+                <?php endforeach ?>
+                </tbody>
+            </table>
+            <?php echo $this->getPagerHtml() ?>
+            <script type="text/javascript">decorateTable('my-view-adjuststock-table')</script>
+        <?php else: ?>
+            <p><?php echo $this->__('You don\'t have any product to adjust stock') ?></p>
+        <?php endif ?>
+
+        <?php
+    }else{ ?>
+        <?php $productSuppliers = $this->listProductAdjustStockSupplier(); ?>
+        <?php $data = Mage::app()->getRequest()->getPost();
+        $warehouse_id = $data['warehouse_id']?$data['warehouse_id']:Mage::app()->getRequest()->getParam('warehouse_id');
+        if(isset($warehouse_id)){
+            $warehouse = Mage::getModel('inventoryplus/warehouse')->load($warehouse_id);
+            $supplier = Mage::getSingleton('inventorydropship/session')->getSupplier();
+            $supplierProduct = Mage::getModel('inventorypurchasing/supplier_product')->getCollection()
+                ->addFieldToFilter('supplier_id', $supplier->getId());
+            $productIds = array();
+            foreach ($supplierProduct as $itemSP){
+                $productIds[] = $itemSP->getProductId();
+            }
+            $collection = Mage::getModel('catalog/product')->getCollection()
+                ->addAttributeToSelect('*')
+                ->addAttributeToFilter('entity_id', array('in' => $productIds))
+                ->addAttributeToFilter('type_id', array('nin' => array('configurable', 'bundle', 'grouped')));
+            $collection->joinField('qty', 'inventoryplus/warehouse_product', 'total_qty', 'product_id=entity_id', '{{table}}.warehouse_id=' . $warehouse_id, 'left');
+
+        }else{ ?>
+            <script>
+                window.location.href = "<?php echo Mage::getBaseUrl()?>./inventorydropship/supplier/adjuststock/"
+            </script>
+        <?php }?>
+        <form method="post" action="<?php echo Mage::getBaseUrl().'/inventorydropship/supplier/save'?>">
+            <div class="page-title">
+                <h1><?php echo $this->__('Add Stock Adjustment') ?></h1>
+                <button type="submit" style="position: absolute;top: 26px;right: 31px;" title="Save" class="button">
+                    <?php echo $this->__('Save')?>
+                </button>
+            </div>
+            <div>
+                <div>
+                    <h4 style="margin:0;border-bottom: 0px;font-size: 13px;padding: 5px 10px;border: 1px solid #dcdcdc;background-color: #f7f7f7;" class="icon-head head-edit-form fieldset-legend">
+                        <?php echo $this->__('Stock Adjustment Information')?>
+                    </h4>
+                </div>
+                <div style="border: 1px solid #d6d6d6;padding: 10px 15px;margin-bottom: 15px;">
+                    <input name="warehouse_id" type="hidden" value=<?php echo $warehouse_id?> id="warehouse_id">
+                    <div class="float-left" style="width: 30% !important;float: left">
+                        <div>
+                            <label for="warehouse">
+                                <strong>Warehouse:&nbsp;&nbsp;</strong>
+                            </label>
+                            <?php echo $warehouse->getWarehouseName()?>
+                        </div><br>
+                    </div>
+                    <div class="float-left">
+
+                        <lable for="warehouse"><strong>Reason(s) for adjusting stock </strong>
+                            <span class="required"></span>
+                        </lable>
+                        <br>
+                        <textarea id="reason" name="reason" title="Reason(s) to adjust stock" rows="2" cols="15" class="required-entry textarea" required></textarea>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+            </div>
+            <div>
+                <div>
+                    <h4 style="border-bottom: 0px;font-size: 13px;padding: 5px 10px;border: 1px solid #dcdcdc;background-color: #f7f7f7;" class="icon-head head-edit-form fieldset-legend">
+                        <?php echo $this->__('Choose Products for Stock Adjustment')?>
+                    </h4>
+                </div>
+            </div>
+
+            <?php if($collection->getSize()): ?>
+                <?php echo $this->getPagerHtml() ?>
+                <table class="data-table" id="my-adjuststock-table" >
+                    <colgroup>
+                        <col width="10" />
+                        <col />
+                        <col />
+                        <col />
+                        <col />
+                        <col width="6" />
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th><input type="checkbox" id="checkAllAdjustStock"></th>
+                        <th><?php echo $this->__('ID') ?></th>
+                        <th><?php echo $this->__('Name') ?></th>
+                        <th><?php echo $this->__('SKU') ?></th>
+                        <th><?php echo $this->__('Image') ?></th>
+                        <th><?php echo $this->__('Qty Before Adjusting') ?></th>
+                        <th><?php echo $this->__('Adjusted Qty') ?></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php foreach ($collection as $item): ?>
+                        <tr>
+                            <td style="text-align: center;" name="td_checkbox"><input type="checkbox" name="products[<?php echo $item->getId()?>]"></td>
+                            <td><?php echo $item->getId()?></td>
+                            <td><?php echo $item->getName()?></td>
+                            <td><?php echo $item->getSku() ?></td>
+                            <td><img src="<?php echo Mage::helper('catalog/image')->init($item, 'image')->resize(70, 70);?>" alt=""></td>
+                            <td><?php echo $item->getQty()?$item->getQty():'N/A' ?></td>
+                            <td><input style="max-width: 125px" type="text" name="qty_adjust[<?php echo $item->getId() ?>]" disabled></td>
+                        </tr>
+                    <?php endforeach ?>
+                    </tbody>
+                </table>
+            <?php echo $this->getPagerHtml() ?>
+                <script type="text/javascript">decorateTable('my-adjuststock-table')</script>
+            <?php else: ?>
+                <p><?php echo $this->__('You don\'t have any product to adjust stock') ?></p>
+            <?php endif ?>
+        </form>
+
+        <script>
+
+            $$('#my-adjuststock-table tbody')[0].observe('click', function(event) {
+                var clickedRow = event.findElement('tr');
+                var clickedRow2 = event.findElement('input[type="checkbox"]');
+                var clickedRow3 = event.findElement('input[type="text"]');
+                if (clickedRow && !clickedRow2 && !clickedRow3) {
+                    var checked = clickedRow.childElements()[0].childElements()[0].checked;
+                    if(checked){
+                        clickedRow.childElements()[0].childElements()[0].checked = false;
+                        clickedRow.childElements()[6].childElements()[0].disabled = true;
+                        clickedRow.childElements()[6].childElements()[0].required = false;
+                    }else{
+                        clickedRow.childElements()[0].childElements()[0].checked = true;
+                        clickedRow.childElements()[6].childElements()[0].disabled = false;
+                        clickedRow.childElements()[6].childElements()[0].required = true;
+                    }
+                }
+
+                if(clickedRow2){
+                    clickedRow.childElements()[6].childElements()[0].disabled = !clickedRow.childElements()[0].childElements()[0].checked;
+                    clickedRow.childElements()[6].childElements()[0].required = clickedRow.childElements()[0].childElements()[0].checked;
+                }
+            });
+
+            $('checkAllAdjustStock').observe('click', function (event) {
+                $$('#my-adjuststock-table tbody tr').forEach(function(element) {
+                    element.childElements()[0].childElements()[0].checked = $('checkAllAdjustStock').checked;
+                    element.childElements()[6].childElements()[0].disabled = !$('checkAllAdjustStock').checked;
+                    element.childElements()[6].childElements()[0].required = $('checkAllAdjustStock').checked;
+                });
+            });
+        </script>
+<?php }?>

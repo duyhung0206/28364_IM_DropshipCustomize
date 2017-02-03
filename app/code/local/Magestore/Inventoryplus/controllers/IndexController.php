@@ -9,8 +9,7 @@
 class Magestore_Inventoryplus_IndexController extends Mage_Core_Controller_Front_Action {
 
     public function indexAction() {
-        $resource = Mage::getResourceModel('inventoryplus/warehouse_product');
-        $result = $resource->getCatalogQty(905);
-        var_dump($result);
+        $collection = Mage::getModel('cataloginventory/stock_item')->getCollection()->addFieldToFilter('product_id', 384);
+        Zend_Debug::dump($collection->getData());
     }
 }

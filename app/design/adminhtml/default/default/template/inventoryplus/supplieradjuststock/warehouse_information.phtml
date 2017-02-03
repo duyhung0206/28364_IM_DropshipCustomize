@@ -1,0 +1,69 @@
+<?php
+$warehouse_id = '';
+if ($adjustStockProducts = Mage::getModel('admin/session')->getData('supplieradjuststock_product_warehouse')) {
+    $warehouse_id = $adjustStockProducts['warehouse_id'];
+}
+$status = array(
+    0 => 'Pending',
+    1 => 'Completed',
+    2 => 'Canceled'
+);
+if ($this->getRequest()->getParam('id')) {
+    $id = $this->getRequest()->getParam('id');
+    $supplieradjustStock = Mage::getModel('inventorydropship/supplier_adjuststock')->load($id);
+    $warehouse_id = $supplieradjustStock->getWarehouseId();
+}
+$warehouse = Mage::getModel('inventoryplus/warehouse')->load($warehouse_id);
+$permission = Mage::helper('inventoryplus')->getPermission($warehouse_id, 'can_adjust');
+?>
+<div class="entry-edit">
+    <div class="entry-edit-head">
+        <h4 class="icon-head head-edit-form fieldset-legend"><?php echo $this->__('Supplier Stock Adjustment Information') ?></h4>
+    </div>
+    <div id="adjuststock_form" class="fieldset ">
+        <input name="warehouse_id" type="hidden" value="<?php echo $warehouse_id ?>" id="warehouse_id"/>
+        <div class="float-left width-percent-30">
+            <div>
+                <label for="warehouse">
+                    <strong><?php echo $this->__('Warehouse') ?>:&nbsp;&nbsp;</strong>
+                </label>
+                <a href="<?php echo $this->getUrl('adminhtml/inp_warehouse/edit', array('id' => $warehouse_id)) ?>" title="<?php $this->__('View warehouse') ?>">
+                    <?php echo $warehouse->getWarehouseName() ?>
+                </a>
+            </div><br />
+            <div>
+                <?php echo $warehouse->getStreet() ?>
+                <?php if ($warehouse->getState()): ?>
+                    <?php echo ' - ' . $warehouse->getState() ?>
+                <?php endif ?>
+                <?php if ($warehouse->getCity()): ?>
+                    <?php echo ' - ' . $warehouse->getCity() ?><br />
+                <?php endif ?>
+                <?php echo Mage::getModel('directory/country')->load($warehouse->getCountryId())->getName() ?>
+            </div>  
+        </div>
+        <div class="float-left">
+            <?php if ($this->getRequest()->getParam('id')): ?>
+                <?php $id = $this->getRequest()->getParam('id') ?>
+                <?php $helper = Mage::helper('inventoryplus'); ?>
+                <lable for="warehouse"><?php echo '<strong>' . $this->__('Status: ') . '</strong>' . $status[$supplieradjustStock->getStatus()]; ?></lable>
+                <br />
+                <lable for="warehouse"><?php echo '<strong>' . $this->__('Created by: ') . '</strong>' . $supplieradjustStock->getCreatedBy() ?></lable>
+                <br />
+                <?php $date = new Zend_Date(); ?>
+                <?php $date->setLocale(Mage::app()->getLocale()->getLocaleCode()); ?>
+                <?php $date_adjust = $date->setDate($supplieradjustStock->getCreatedAt(), 'yyyy/MM/dd'); ?>
+                <lable for="warehouse"><?php echo '<strong>' . $this->__('Created on: ') . '</strong>' . Mage::helper('core')->formatDate($date_adjust, 'medium'); ?></lable>
+                <br /><br />
+            <?php endif ?>
+
+            <lable for="warehouse"><strong><?php echo $this->__('Reason(s) for adjusting stock') ?><?php if ($this->getRequest()->getParam('id')) echo ':' ?><?php echo ' ' ?></strong>
+                <?php if (!$this->getRequest()->getParam('id')): ?>
+                <?php endif; ?>
+            </lable>
+            <br />
+            <?php echo $supplieradjustStock->getReason();?>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>

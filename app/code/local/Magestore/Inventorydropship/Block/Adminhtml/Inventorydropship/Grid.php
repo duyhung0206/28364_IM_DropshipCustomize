@@ -60,12 +60,12 @@ class Magestore_Inventorydropship_Block_Adminhtml_Inventorydropship_Grid extends
      */
     protected function _prepareColumns()
     {
-//        $this->addColumn('dropship_id', array(
-//            'header'    => Mage::helper('inventorydropship')->__('ID'),
-//            'align'     =>'center',
-//            'width'     => '50px',
-//            'index'     => 'dropship_id',
-//        ));
+        $this->addColumn('dropship_id', array(
+            'header'    => Mage::helper('inventorydropship')->__('Drop shipment #'),
+            'align'     =>'center',
+            'width'     => '10px',
+            'index'     => 'dropship_id',
+        ));
 
         $this->addColumn('increment_id', array(
             'header_css_class' => 'a-center',
@@ -89,7 +89,7 @@ class Magestore_Inventorydropship_Block_Adminhtml_Inventorydropship_Grid extends
             'header_css_class' => 'a-center',
             'header'    => Mage::helper('inventorydropship')->__('Recipient'),
             'align'     => 'center',
-            'width'     => '50px',
+//            'width'     => '50px',
             'index'     => 'shipping_name',
         ));
 
@@ -123,7 +123,6 @@ class Magestore_Inventorydropship_Block_Adminhtml_Inventorydropship_Grid extends
             'header_css_class' => 'a-center',
             'header'    => Mage::helper('inventorydropship')->__('Status'),
             'align'     => 'center',
-            'width'     => '80px',
             'index'     => 'status',
             'type'        => 'options',
             'options' => Mage::getSingleton('inventorydropship/status')->getOptionArray(),
